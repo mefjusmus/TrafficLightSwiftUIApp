@@ -7,15 +7,54 @@
 
 import SwiftUI
 
+enum CurrentColor {
+    case red
+    case yellow
+    case green
+}
+
 struct ContentView: View {
+    @State private var currentColor: CurrentColor = .red
+    @State private var isTapped = false
+    
+    @State private var redCircle = CircleView(opacity: 0.3, color: .red)
+    @State private var yellowCircle = CircleView(opacity: 0.3, color: .yellow)
+    @State private var greenCircle = CircleView(opacity: 0.3, color: .green)
+    
+    private let lightOn = 1.0
+    private let lightOff = 0.3
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+            redCircle
+            yellowCircle
+            greenCircle
+            Button(isTapped ? "NEXT" : "START", action: changeColor)
+            .buttonStyle(.borderedProminent)
+            .padding()
+            Spacer()
         }
-        .padding()
+    }
+    
+    private func changeColor() {
+        if !isTapped {
+            isTapped = true
+        }
+        
+        switch currentColor {
+        case .red:
+            greenCircle = CircleView(opacity: lightOff, color: .green)
+            redCircle = CircleView(opacity: lightOn, color: .red)
+            currentColor = .yellow
+        case .yellow:
+            redCircle = CircleView(opacity: lightOff, color: .red)
+            yellowCircle = CircleView(opacity: lightOn, color: .yellow)
+            currentColor = .green
+        case .green:
+            yellowCircle = CircleView(opacity: lightOff, color: .yellow)
+            greenCircle = CircleView(opacity: lightOn, color: .green)
+            currentColor = .red
+        }
     }
 }
 
